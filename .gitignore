@@ -3,8 +3,12 @@ CUSoC Contributor's Guidelines.pdf
 
 # Depending on the chosen stack, you might want to add other ignores below
 node_modules/
+dist/
+.vercel/
 .env
+.env.local
 __pycache__/
 *.pyc
 venv/
 .DS_Store
+

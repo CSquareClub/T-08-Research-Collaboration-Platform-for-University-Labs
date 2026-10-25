@@ -27,8 +27,8 @@ export default function Dashboard() {
           API.get('/projects'),
           API.get('/collaboration-requests'),
         ]);
-        setProjects(projRes.data);
-        setRequests(reqRes.data);
+        setProjects(Array.isArray(projRes.data) ? projRes.data : []);
+        setRequests(Array.isArray(reqRes.data) ? reqRes.data : []);
       } catch (err) {
         console.error('Dashboard fetch error:', err);
       } finally {
@@ -38,11 +38,13 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const pendingRequests = requests.filter((r) => r.status === 'Pending');
-  const myProjects = projects.filter(
+  const projectList = Array.isArray(projects) ? projects : [];
+  const requestList = Array.isArray(requests) ? requests : [];
+  const pendingRequests = requestList.filter((r) => r.status === 'Pending');
+  const myProjects = projectList.filter(
     (p) => p.owner?._id === user?._id || p.owner === user?._id
   );
-  const openProjects = projects.filter((p) => p.status === 'Open');
+  const openProjects = projectList.filter((p) => p.status === 'Open');
 
   const isFacultyOrPI = user?.role === 'Faculty' || user?.role === 'PI';
 
@@ -61,7 +63,7 @@ export default function Dashboard() {
         {/* Greeting */}
         <div className="dash-greeting">
           <div>
-            <h1>Welcome back, {user?.name?.split(' ')[0]}!</h1>
+            <h1>Welcome back, {user?.name ? user.name.split(' ')[0] : 'Researcher'}!</h1>
             <p>Here's an overview of your research activity.</p>
           </div>
           {isFacultyOrPI && (
@@ -79,7 +81,7 @@ export default function Dashboard() {
               <FolderSearch size={22} />
             </div>
             <div className="stat-info">
-              <span className="stat-number">{projects.length}</span>
+              <span className="stat-number">{projectList.length}</span>
               <span className="stat-label">Total Projects</span>
             </div>
           </div>

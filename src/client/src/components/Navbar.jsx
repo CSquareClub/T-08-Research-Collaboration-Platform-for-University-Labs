@@ -17,7 +17,6 @@ import './Navbar.css';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 

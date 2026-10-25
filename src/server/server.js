@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const http = require('http');
 const { Server } = require('socket.io');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 require('dotenv').config();
 
 const app = express();
@@ -24,7 +26,9 @@ app.use((req, res, next) => {
 });
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 app.use(cors());
 app.use(express.json());
 
@@ -41,6 +45,41 @@ app.get('/', (req, res) => {
   res.send('ResearchHub API is running');
 });
 
+// Database connection with connection caching for serverless environments
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    isConnected = true;
+    return;
+  }
+  try {
+    if (process.env.MONGO_URI) {
+      const db = await mongoose.connect(process.env.MONGO_URI);
+      isConnected = db.connections[0].readyState >= 1;
+      console.log('✅ MongoDB Connected successfully');
+    } else {
+      console.warn('⚠️ MONGO_URI is not defined. Skipping database connection for now.');
+    }
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message || error);
+    if (error.code === 'ENOTFOUND' || error.syscall === 'querySrv') {
+      console.error('\n💡 Troubleshooting "querySrv ENOTFOUND":');
+      console.error('1. The cluster hostname in MONGO_URI does not exist or has a typo.');
+      console.error('2. Go to MongoDB Atlas (cloud.mongodb.com) -> Cluster -> "Connect" -> "Drivers" to copy your latest URI.');
+      console.error('3. Make sure Network Access in Atlas includes your current IP or 0.0.0.0/0 (allow from anywhere).\n');
+    }
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
+  }
+};
+
+// Ensure database connection before processing API requests
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
 // API Routes
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/users', require('./routes/users.routes'));
@@ -55,37 +94,27 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Internal Server Error' });
 });
 
-// Database connection
-const connectDB = async () => {
-  try {
-    if (process.env.MONGO_URI) {
-      await mongoose.connect(process.env.MONGO_URI);
-      console.log('MongoDB Connected');
-    } else {
-      console.warn('MONGO_URI is not defined. Skipping database connection for now.');
-    }
-  } catch (error) {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-  }
-};
+// When running standalone (local development)
+if (require.main === module) {
+  connectDB();
 
-connectDB();
+  io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
 
-io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
+    // Users join a room with their user ID to receive direct notifications
+    socket.on('join', (userId) => {
+      socket.join(userId);
+      console.log(`User ${userId} joined their room`);
+    });
 
-  // Users join a room with their user ID to receive direct notifications
-  socket.on('join', (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined their room`);
+    socket.on('disconnect', () => {
+      console.log('User disconnected:', socket.id);
+    });
   });
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+  server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
-});
+}
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;

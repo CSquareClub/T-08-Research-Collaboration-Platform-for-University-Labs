@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { io } from 'socket.io-client';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -67,6 +67,7 @@ function AppLayout({ children }) {
 
   return (
     <>
+      <Toaster position="top-right" />
       <Navbar />
       <main style={{ flex: 1 }}>{children}</main>
     </>

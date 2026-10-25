@@ -1,0 +1,29 @@
+{
+  "name": "researchhub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Research Collaboration Platform for University Labs (CUSoC T-08)",
+  "scripts": {
+    "build": "npm install --prefix src/client && npm run build --prefix src/client",
+    "vercel-build": "npm install --prefix src/client && npm run build --prefix src/client",
+    "dev:server": "npm run dev --prefix src/server",
+    "dev:client": "npm run dev --prefix src/client",
+    "seed": "npm run seed --prefix src/server"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^1.41.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.4",
+    "multer": "^2.2.0",
+    "multer-storage-cloudinary": "^4.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "socket.io": "^4.8.3"
+  }
+}

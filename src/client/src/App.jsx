@@ -37,8 +37,14 @@ function AppLayout({ children }) {
 
   useEffect(() => {
     if (user?._id) {
-      const newSocket = io(import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000');
-      
+      const socketUrl = import.meta.env.VITE_SOCKET_URL || 
+        (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.startsWith('/')
+          ? import.meta.env.VITE_API_URL.replace('/api', '')
+          : (window.location.hostname === 'localhost' ? 'http://localhost:5000' : window.location.origin));
+      const newSocket = io(socketUrl, { reconnectionAttempts: 3, timeout: 5000 });
+      newSocket.on('connect_error', () => {
+        // Gracefully ignore WebSocket connection errors in environments without active WS
+      });
       newSocket.emit('join', user._id);
 
       newSocket.on('notification', (data) => {

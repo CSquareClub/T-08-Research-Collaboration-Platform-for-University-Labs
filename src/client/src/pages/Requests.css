@@ -1,0 +1,108 @@
+.requests-page {
+  padding: 32px 0;
+}
+.requests-page h1 {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+.requests-subtitle {
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.req-section {
+  margin-bottom: 36px;
+}
+.req-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.req-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.req-card:hover {
+  transform: none;
+}
+
+.req-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.req-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.req-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+.req-name {
+  font-weight: 500;
+  font-size: 14px;
+  display: block;
+}
+.req-dept {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.req-project {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+.req-project-label {
+  color: var(--text-secondary);
+}
+.req-project-name {
+  font-weight: 500;
+  color: var(--primary-600);
+}
+
+.req-message {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 10px 14px;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary-200);
+}
+
+.req-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.req-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}

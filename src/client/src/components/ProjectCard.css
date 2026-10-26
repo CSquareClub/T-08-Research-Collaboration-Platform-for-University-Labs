@@ -1,0 +1,117 @@
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary-500);
+  border-radius: 4px 0 0 4px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.pc-header {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pc-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.pc-abstract {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.pc-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-light);
+}
+
+.pc-owner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pc-owner-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--primary-100);
+  color: var(--primary-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pc-owner-info {
+  display: flex;
+  flex-direction: column;
+}
+.pc-owner-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.pc-owner-dept {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+
+.pc-team {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.pc-cta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--primary-600);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+.project-card:hover .pc-cta {
+  opacity: 1;
+  transform: translateX(0);
+}
